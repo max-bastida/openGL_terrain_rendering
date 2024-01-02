@@ -1,0 +1,37 @@
+#version 400
+
+layout(vertices = 4) out;
+uniform vec4 eyePos;
+
+void main()
+{
+    gl_out[gl_InvocationID].gl_Position
+      = gl_in[gl_InvocationID].gl_Position;
+
+    float dmin = 20;
+    float dmax = 100;
+
+    vec4 edgemid0 = (gl_in[0].gl_Position + gl_in[3].gl_Position) * 0.5;
+    float dist0 = distance(eyePos, edgemid0);
+    int level0 = 20 - int((dist0 - dmin)*18.0/(dmax-dmin));
+
+    vec4 edgemid1 = (gl_in[1].gl_Position + gl_in[0].gl_Position) * 0.5;
+    float dist1 = distance(eyePos, edgemid1);
+    int level1 = 20 - int((dist1 - dmin)*18.0/(dmax-dmin));
+
+    vec4 edgemid2 = (gl_in[2].gl_Position + gl_in[1].gl_Position) * 0.5;
+    float dist2 = distance(eyePos, edgemid2);
+    int level2 = 20 - int((dist2 - dmin)*18.0/(dmax-dmin));
+
+    vec4 edgemid3 = (gl_in[3].gl_Position + gl_in[2].gl_Position) * 0.5;
+    float dist3 = distance(eyePos, edgemid3);
+    int level3 = 20 - int((dist3 - dmin)*18.0/(dmax-dmin));
+
+
+    gl_TessLevelOuter[0] = level0;
+    gl_TessLevelOuter[1] = level1;
+    gl_TessLevelOuter[2] = level2;
+    gl_TessLevelOuter[3] = level3;
+    gl_TessLevelInner[0] = level0;
+    gl_TessLevelInner[1] = level2;
+}
